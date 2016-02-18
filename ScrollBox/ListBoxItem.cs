@@ -26,7 +26,8 @@
         static ListBoxItem()
         {
             EventManager.RegisterClassHandler(typeof(ScrollViewer), ScrollViewer.ScrollChangedEvent, new RoutedEventHandler(OnScrollChanged));
-            EventManager.RegisterClassHandler(typeof(System.Windows.Controls.ListBoxItem), FrameworkElement.SizeChangedEvent, new RoutedEventHandler(OnSizeChanged));
+            EventManager.RegisterClassHandler(typeof(ScrollViewer), FrameworkElement.SizeChangedEvent, new RoutedEventHandler(OnScrollChanged));
+            EventManager.RegisterClassHandler(typeof(System.Windows.Controls.ListBoxItem), FrameworkElement.SizeChangedEvent, new RoutedEventHandler(OnListBoxItemSizeChanged));
         }
 
         private static void SetIsScrolledIntoView(System.Windows.Controls.ListBoxItem element, ScrolledIntoView value)
@@ -88,7 +89,7 @@
             }
         }
 
-        private static void OnSizeChanged(object sender, RoutedEventArgs e)
+        private static void OnListBoxItemSizeChanged(object sender, RoutedEventArgs e)
         {
             var listBoxItem = (System.Windows.Controls.ListBoxItem)sender;
             var scrollViewer = listBoxItem.VisualAncestors()
@@ -116,19 +117,17 @@
 
             //Check if the elements Rect intersects with that of the scrollviewer's
             var scrollViewerBounds = new Rect(new Point(0, 0), scrollViewer.RenderSize);
-            var intersection = Rect.Intersect(scrollViewerBounds, transformedBounds);
-            //if result is Empty then the element is not in view
-            if (intersection == Rect.Empty)
-            {
-                return ScrolledIntoView.Nope;
-            }
-
-            if (intersection == transformedBounds)
+            if (scrollViewerBounds.Contains(transformedBounds))
             {
                 return ScrolledIntoView.Fully;
             }
 
-            return ScrolledIntoView.Partly;
+            if (scrollViewerBounds.IntersectsWith(transformedBounds))
+            {
+                return ScrolledIntoView.Partly;
+            }
+
+            return ScrolledIntoView.Nope;
         }
 
         private static IEnumerable<Visual> VisualAncestors(this Visual child)
