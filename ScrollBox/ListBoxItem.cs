@@ -10,10 +10,10 @@
     public static partial class ListBoxItem
     {
         private static readonly DependencyPropertyKey IsScrolledIntoViewPropertyKey = DependencyProperty.RegisterAttachedReadOnly(
-                "IsScrolledIntoView",
-                typeof(ScrolledIntoView),
-                typeof(ListBoxItem),
-                new PropertyMetadata(ScrolledIntoView.Nope, OnScrolledIntoViewChanged));
+            "IsScrolledIntoView",
+            typeof(ScrolledIntoView),
+            typeof(ListBoxItem),
+            new PropertyMetadata(ScrolledIntoView.Nope, OnScrolledIntoViewChanged));
 
         private static readonly DependencyProperty ScrollViewerProperty = DependencyProperty.RegisterAttached(
             "ScrollViewer",
