@@ -1,4 +1,4 @@
-﻿namespace ScrollBox
+﻿namespace Gu.Wpf.ScrollExtensions
 {
     public enum ScrolledIntoView
     {

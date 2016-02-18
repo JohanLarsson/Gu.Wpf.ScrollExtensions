@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScrollBox", "ScrollBox\ScrollBox.csproj", "{12F7B1BB-A10C-4433-9DD4-B985E002E4A4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gu.Wpf.ScrollExtensions", "Gu.Wpf.ScrollExtensions\Gu.Wpf.ScrollExtensions.csproj", "{E58306BC-BF93-4EF1-9A30-16ED83CE5D86}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gu.Wpf.ScrollExtensions.Demo", "Gu.Wpf.ScrollExtensions.Demo\Gu.Wpf.ScrollExtensions.Demo.csproj", "{12F7B1BB-A10C-4433-9DD4-B985E002E4A4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,6 +13,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E58306BC-BF93-4EF1-9A30-16ED83CE5D86}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E58306BC-BF93-4EF1-9A30-16ED83CE5D86}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E58306BC-BF93-4EF1-9A30-16ED83CE5D86}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E58306BC-BF93-4EF1-9A30-16ED83CE5D86}.Release|Any CPU.Build.0 = Release|Any CPU
 		{12F7B1BB-A10C-4433-9DD4-B985E002E4A4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{12F7B1BB-A10C-4433-9DD4-B985E002E4A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{12F7B1BB-A10C-4433-9DD4-B985E002E4A4}.Release|Any CPU.ActiveCfg = Release|Any CPU

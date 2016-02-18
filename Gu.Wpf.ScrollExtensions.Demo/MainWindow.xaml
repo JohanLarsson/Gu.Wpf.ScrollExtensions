@@ -1,9 +1,9 @@
-﻿<Window x:Class="ScrollBox.MainWindow"
+﻿<Window x:Class="Gu.Wpf.ScrollExtensions.Demo.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:local="clr-namespace:ScrollBox"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:scroll="http://gu.se/ScrollExtensions"
         Title="MainWindow"
         Width="525"
         Height="350"
@@ -19,17 +19,18 @@
                 <Setter Property="BorderBrush" Value="{x:Null}" />
                 <Setter Property="BorderThickness" Value="3" />
                 <Setter Property="Margin" Value="5" />
-                <EventSetter Event="local:ListBoxItem.FirstAppearance" Handler="OnFirstAppearance"></EventSetter>
+                <EventSetter Event="scroll:ListBoxItem.FirstAppearance"
+                             Handler="OnFirstAppearance" />
                 <Style.Triggers>
-                    <DataTrigger Binding="{Binding Path=(local:ListBoxItem.IsScrolledIntoView),
+                    <DataTrigger Binding="{Binding Path=(scroll:ListBoxItem.IsScrolledIntoView),
                                                    RelativeSource={RelativeSource Self}}"
-                                 Value="{x:Static local:ScrolledIntoView.Fully}">
+                                 Value="{x:Static scroll:ScrolledIntoView.Fully}">
                         <Setter Property="BorderBrush" Value="HotPink" />
                     </DataTrigger>
 
-                    <DataTrigger Binding="{Binding Path=(local:ListBoxItem.IsScrolledIntoView),
+                    <DataTrigger Binding="{Binding Path=(scroll:ListBoxItem.IsScrolledIntoView),
                                                    RelativeSource={RelativeSource Self}}"
-                                 Value="{x:Static local:ScrolledIntoView.Partly}">
+                                 Value="{x:Static scroll:ScrolledIntoView.Partly}">
                         <Setter Property="BorderBrush" Value="Gray" />
                     </DataTrigger>
                 </Style.Triggers>

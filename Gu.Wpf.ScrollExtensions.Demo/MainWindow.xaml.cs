@@ -1,4 +1,4 @@
-﻿namespace ScrollBox
+﻿namespace Gu.Wpf.ScrollExtensions.Demo
 {
     using System.Windows;
     using System.Windows.Controls;
