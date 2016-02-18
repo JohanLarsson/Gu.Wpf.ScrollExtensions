@@ -4,12 +4,6 @@
 
     public static partial class ListBoxItem
     {
-        private static readonly DependencyProperty HasAppearedProperty = DependencyProperty.RegisterAttached(
-            "HasAppeared",
-            typeof(bool),
-            typeof(ListBoxItem),
-            new PropertyMetadata(default(bool)));
-
         public static readonly RoutedEvent FirstAppearanceEvent = EventManager.RegisterRoutedEvent(
             "FirstAppearance",
             RoutingStrategy.Direct,

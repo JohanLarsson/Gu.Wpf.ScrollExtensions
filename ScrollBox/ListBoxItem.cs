@@ -10,10 +10,10 @@
     public static partial class ListBoxItem
     {
         private static readonly DependencyPropertyKey IsScrolledIntoViewPropertyKey = DependencyProperty.RegisterAttachedReadOnly(
-            "IsScrolledIntoView",
-            typeof(ScrolledIntoView),
-            typeof(ListBoxItem),
-            new PropertyMetadata(ScrolledIntoView.Nope, OnScrolledIntoViewChanged));
+                 "IsScrolledIntoView",
+                 typeof(ScrolledIntoView),
+                 typeof(ListBoxItem),
+                 new PropertyMetadata(ScrolledIntoView.Nope, OnScrolledIntoViewChanged));
 
         private static readonly DependencyProperty ScrollViewerProperty = DependencyProperty.RegisterAttached(
             "ScrollViewer",
@@ -27,7 +27,14 @@
             typeof(ListBoxItem),
             new PropertyMetadata(default(List<System.Windows.Controls.ListBoxItem>)));
 
-        private static readonly DependencyProperty IsScrolledIntoViewProperty = IsScrolledIntoViewPropertyKey.DependencyProperty;
+        private static readonly DependencyProperty HasAppearedProperty =
+            DependencyProperty.RegisterAttached(
+                "HasAppeared",
+                typeof(bool),
+                typeof(ListBoxItem),
+                new PropertyMetadata(default(bool)));
+
+        public static readonly DependencyProperty IsScrolledIntoViewProperty = IsScrolledIntoViewPropertyKey.DependencyProperty;
 
         static ListBoxItem()
         {
@@ -40,6 +47,8 @@
             element.SetValue(IsScrolledIntoViewPropertyKey, value);
         }
 
+        [AttachedPropertyBrowsableForChildren(IncludeDescendants = false)]
+        [AttachedPropertyBrowsableForType(typeof(System.Windows.Controls.ListBoxItem))]
         public static ScrolledIntoView GetIsScrolledIntoView(System.Windows.Controls.ListBoxItem element)
         {
             return (ScrolledIntoView)element.GetValue(IsScrolledIntoViewProperty);
