@@ -22,6 +22,8 @@
 
         private void ListBoxItem_OnScrolledIntoViewChanged(object sender, RoutedEventArgs e)
         {
+            var listBoxItem = (ListBoxItem) e.OriginalSource;
+            var isScrolledIntoView = Gu.Wpf.ScrollExtensions.ListBoxItem.GetIsScrolledIntoView(listBoxItem);
         }
     }
 }
