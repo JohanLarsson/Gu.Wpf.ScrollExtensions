@@ -1,11 +1,9 @@
 ﻿namespace Gu.Wpf.ScrollExtensions
 {
     using System;
-    using System.Collections.Generic;
     using System.Linq;
     using System.Windows;
     using System.Windows.Controls;
-    using System.Windows.Media;
 
     public static partial class ListBoxItem
     {
@@ -67,9 +65,7 @@
         private static void OnScrollChanged(object sender, RoutedEventArgs e)
         {
             var scrollViewer = (ScrollViewer)sender;
-            var listBox = scrollViewer.VisualAncestors()
-                                    .OfType<ListBox>()
-                                    .FirstOrDefault();
+            var listBox = scrollViewer.FirstVisualAncestorOfType<ListBox>();
             if (listBox == null)
             {
                 return;
@@ -84,60 +80,19 @@
                 }
 
                 // looping them all can potentially be expensive, profiler will tell
-                var isInView = IsInView(scrollViewer, item);
-                SetIsScrolledIntoView(item, isInView);
+                var isInView = scrollViewer.IsChildInView(item);
+                SetIsScrolledIntoView(item, isInView.Y);
             }
         }
 
         private static void OnListBoxItemSizeChanged(object sender, RoutedEventArgs e)
         {
             var listBoxItem = (System.Windows.Controls.ListBoxItem)sender;
-            var scrollViewer = listBoxItem.VisualAncestors()
-                                          .OfType<ScrollViewer>()
-                                          .FirstOrDefault();
+            var scrollViewer = listBoxItem.FirstVisualAncestorOfType<ScrollViewer>();
             if (scrollViewer != null)
             {
-                var scrolledIntoView = IsInView(scrollViewer, listBoxItem);
-                SetIsScrolledIntoView(listBoxItem, scrolledIntoView);
-            }
-        }
-
-        // http://blogs.msdn.com/b/llobo/archive/2007/01/18/elements-visibility-inside-scrollviewer.aspx
-        private static ScrolledIntoView IsInView(ScrollViewer scrollViewer, UIElement item)
-        {
-            if (!item.IsArrangeValid)
-            {
-                return ScrolledIntoView.Nope;
-                //item.UpdateLayout();
-            }
-
-            var itemBounds = new Rect(new Point(0, 0), item.RenderSize);
-            var childTransform = item.TransformToAncestor(scrollViewer);
-            var transformedBounds = childTransform.TransformBounds(itemBounds);
-
-            //Check if the elements Rect intersects with that of the scrollviewer's
-            var scrollViewerBounds = new Rect(new Point(0, 0), scrollViewer.RenderSize);
-            if (scrollViewerBounds.Contains(transformedBounds))
-            {
-                return ScrolledIntoView.Fully;
-            }
-
-            if (scrollViewerBounds.IntersectsWith(transformedBounds))
-            {
-                return ScrolledIntoView.Partly;
-            }
-
-            return ScrolledIntoView.Nope;
-        }
-
-        private static IEnumerable<Visual> VisualAncestors(this Visual child)
-        {
-            var parent = VisualTreeHelper.GetParent(child) as Visual;
-            while (parent != null)
-            {
-                yield return parent;
-                child = parent;
-                parent = VisualTreeHelper.GetParent(child) as Visual;
+                var scrolledIntoView = scrollViewer.IsChildInView(listBoxItem);
+                SetIsScrolledIntoView(listBoxItem, scrolledIntoView.Y);
             }
         }
     }
