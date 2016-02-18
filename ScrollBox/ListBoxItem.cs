@@ -15,17 +15,11 @@
             typeof(ListBoxItem),
             new PropertyMetadata(ScrolledIntoView.Nope, OnScrolledIntoViewChanged));
 
-        private static readonly DependencyProperty ScrollViewerProperty = DependencyProperty.RegisterAttached(
-            "ScrollViewer",
-            typeof(ScrollViewer),
-            typeof(ListBoxItem),
-            new PropertyMetadata(default(ScrollViewer)));
-
         private static readonly DependencyProperty HasAppearedProperty = DependencyProperty.RegisterAttached(
-                "HasAppeared",
-                typeof(bool),
-                typeof(ListBoxItem),
-                new PropertyMetadata(default(bool)));
+            "HasAppeared",
+            typeof(bool),
+            typeof(ListBoxItem),
+            new PropertyMetadata(default(bool)));
 
         public static readonly DependencyProperty IsScrolledIntoViewProperty = IsScrolledIntoViewPropertyKey.DependencyProperty;
 
@@ -80,7 +74,7 @@
                 return;
             }
 
-            for (int i = 0; i < listBox.ItemContainerGenerator.Items.Count; i++)
+            for (int i = 0; i < listBox.Items.Count; i++)
             {
                 var item = listBox.ItemContainerGenerator.ContainerFromIndex(i) as System.Windows.Controls.ListBoxItem;
                 if (item == null)

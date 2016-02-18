@@ -18,6 +18,7 @@
             <Style TargetType="{x:Type ListBoxItem}">
                 <Setter Property="BorderBrush" Value="{x:Null}" />
                 <Setter Property="BorderThickness" Value="3" />
+                <Setter Property="Margin" Value="5" />
                 <EventSetter Event="local:ListBoxItem.FirstAppearance" Handler="OnFirstAppearance"></EventSetter>
                 <Style.Triggers>
                     <DataTrigger Binding="{Binding Path=(local:ListBoxItem.IsScrolledIntoView),
