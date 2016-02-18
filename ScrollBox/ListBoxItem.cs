@@ -1,18 +1,19 @@
 ﻿namespace ScrollBox
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Windows.Media;
     using System.Windows;
     using System.Windows.Controls;
 
-    public static class ListBoxItem
+    public static partial class ListBoxItem
     {
         private static readonly DependencyPropertyKey IsScrolledIntoViewPropertyKey = DependencyProperty.RegisterAttachedReadOnly(
             "IsScrolledIntoView",
             typeof(ScrolledIntoView),
             typeof(ListBoxItem),
-            new PropertyMetadata(ScrolledIntoView.Nope));
+            new PropertyMetadata(ScrolledIntoView.Nope, OnScrolledIntoViewChanged));
 
         private static readonly DependencyProperty ScrollViewerProperty = DependencyProperty.RegisterAttached(
             "ScrollViewer",
@@ -44,6 +45,28 @@
             return (ScrolledIntoView)element.GetValue(IsScrolledIntoViewProperty);
         }
 
+        private static void OnScrolledIntoViewChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var item = (System.Windows.Controls.ListBoxItem)d;
+            item.RaiseEvent(new RoutedEventArgs(ScrolledIntoViewChangedEvent));
+            var scrolledIntoView = (ScrolledIntoView)e.NewValue;
+            if (Equals(item.GetValue(HasAppearedProperty), false))
+            {
+                switch (scrolledIntoView)
+                {
+                    case ScrolledIntoView.Fully:
+                    case ScrolledIntoView.Partly:
+                        item.RaiseEvent(new RoutedEventArgs(FirstAppearanceEvent));
+                        item.SetValue(HasAppearedProperty, true);
+                        break;
+                    case ScrolledIntoView.Nope:
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            }
+        }
+
         private static void OnScrollChanged(object sender, RoutedEventArgs e)
         {
             var scrollViewer = (ScrollViewer)sender;
@@ -68,7 +91,9 @@
             var scrollViewer = value as ScrollViewer;
             if (value == null)
             {
-                scrollViewer = listBoxItem.VisualAncestors().OfType<ScrollViewer>().FirstOrDefault();
+                scrollViewer = listBoxItem.VisualAncestors()
+                                          .OfType<ScrollViewer>()
+                                          .FirstOrDefault();
                 if (scrollViewer == null)
                 {
                     listBoxItem.SetValue(ScrollViewerProperty, "No scrollviewer");

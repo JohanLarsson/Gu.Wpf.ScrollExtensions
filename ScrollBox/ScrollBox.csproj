@@ -55,6 +55,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="ListBoxItem.cs" />
+    <Compile Include="ListBoxItem.Events.cs" />
     <Compile Include="ScrolledIntoView.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
