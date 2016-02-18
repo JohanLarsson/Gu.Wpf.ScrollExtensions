@@ -1,0 +1,41 @@
+﻿<Window x:Class="ScrollBox.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="clr-namespace:ScrollBox"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        Title="MainWindow"
+        Width="525"
+        Height="350"
+        mc:Ignorable="d">
+    <Window.Resources>
+        <Style TargetType="{x:Type Rectangle}">
+            <Setter Property="Height" Value="100" />
+        </Style>
+    </Window.Resources>
+    <ListBox>
+        <ListBox.ItemContainerStyle>
+            <Style TargetType="{x:Type ListBoxItem}">
+                <Setter Property="BorderBrush" Value="{x:Null}" />
+                <Setter Property="BorderThickness" Value="3" />
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding Path=(local:ListBoxItem.IsScrolledIntoView),
+                                                   RelativeSource={RelativeSource Self}}"
+                                 Value="{x:Static local:ScrolledIntoView.Fully}">
+                        <Setter Property="BorderBrush" Value="HotPink" />
+                    </DataTrigger>
+
+                    <DataTrigger Binding="{Binding Path=(local:ListBoxItem.IsScrolledIntoView),
+                                                   RelativeSource={RelativeSource Self}}"
+                                 Value="{x:Static local:ScrolledIntoView.Partly}">
+                        <Setter Property="BorderBrush" Value="Gray" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+        </ListBox.ItemContainerStyle>
+        <Rectangle Fill="Blue" />
+        <Rectangle Fill="Yellow" />
+        <Rectangle Fill="Blue" />
+        <Rectangle Fill="Yellow" />
+    </ListBox>
+</Window>
