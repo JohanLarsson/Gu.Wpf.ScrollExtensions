@@ -13,7 +13,7 @@
             <Setter Property="FontSize" Value="72" />
         </Style>
     </Window.Resources>
-    <ListBox>
+    <ListBox scroll:ListBoxItem.ScrolledIntoViewChanged="ListBoxItem_OnScrolledIntoViewChanged">
         <ListBox.ItemContainerStyle>
             <Style TargetType="{x:Type ListBoxItem}">
                 <Setter Property="BorderBrush" Value="{x:Null}" />

@@ -19,5 +19,9 @@
             var textBlock = (TextBlock)listBoxItem.Content;
             textBlock.Text = "Appeared" + textBlock.Text;
         }
+
+        private void ListBoxItem_OnScrolledIntoViewChanged(object sender, RoutedEventArgs e)
+        {
+        }
     }
 }

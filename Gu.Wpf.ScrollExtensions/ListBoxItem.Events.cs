@@ -6,13 +6,13 @@
     {
         public static readonly RoutedEvent FirstAppearanceEvent = EventManager.RegisterRoutedEvent(
             "FirstAppearance",
-            RoutingStrategy.Direct,
+            RoutingStrategy.Bubble,
             typeof(RoutedEventHandler),
             typeof(ListBoxItem));
 
         public static readonly RoutedEvent ScrolledIntoViewChangedEvent = EventManager.RegisterRoutedEvent(
             "ScrolledIntoViewChanged",
-            RoutingStrategy.Direct,
+            RoutingStrategy.Bubble,
             typeof(RoutedEventHandler),
             typeof(ListBoxItem));
 
