@@ -10,10 +10,10 @@
     public static partial class ListBoxItem
     {
         private static readonly DependencyPropertyKey IsScrolledIntoViewPropertyKey = DependencyProperty.RegisterAttachedReadOnly(
-                 "IsScrolledIntoView",
-                 typeof(ScrolledIntoView),
-                 typeof(ListBoxItem),
-                 new PropertyMetadata(ScrolledIntoView.Nope, OnScrolledIntoViewChanged));
+                "IsScrolledIntoView",
+                typeof(ScrolledIntoView),
+                typeof(ListBoxItem),
+                new PropertyMetadata(ScrolledIntoView.Nope, OnScrolledIntoViewChanged));
 
         private static readonly DependencyProperty ScrollViewerProperty = DependencyProperty.RegisterAttached(
             "ScrollViewer",
@@ -21,14 +21,7 @@
             typeof(ListBoxItem),
             new PropertyMetadata(default(ScrollViewer)));
 
-        private static readonly DependencyProperty ListBoxItemsProperty = DependencyProperty.RegisterAttached(
-            "ListBoxItems",
-            typeof(List<System.Windows.Controls.ListBoxItem>),
-            typeof(ListBoxItem),
-            new PropertyMetadata(default(List<System.Windows.Controls.ListBoxItem>)));
-
-        private static readonly DependencyProperty HasAppearedProperty =
-            DependencyProperty.RegisterAttached(
+        private static readonly DependencyProperty HasAppearedProperty = DependencyProperty.RegisterAttached(
                 "HasAppeared",
                 typeof(bool),
                 typeof(ListBoxItem),
@@ -79,14 +72,22 @@
         private static void OnScrollChanged(object sender, RoutedEventArgs e)
         {
             var scrollViewer = (ScrollViewer)sender;
-            var items = (IReadOnlyList<System.Windows.Controls.ListBoxItem>)scrollViewer.GetValue(ListBoxItemsProperty);
-            if (items == null)
+            var listBox = scrollViewer.VisualAncestors()
+                                    .OfType<ListBox>()
+                                    .FirstOrDefault();
+            if (listBox == null)
             {
                 return;
             }
 
-            foreach (var item in items)
+            for (int i = 0; i < listBox.ItemContainerGenerator.Items.Count; i++)
             {
+                var item = listBox.ItemContainerGenerator.ContainerFromIndex(i) as System.Windows.Controls.ListBoxItem;
+                if (item == null)
+                {
+                    continue;
+                }
+
                 // looping them all can potentially be expensive, profiler will tell
                 var isInView = IsInView(scrollViewer, item);
                 SetIsScrolledIntoView(item, isInView);
@@ -96,32 +97,9 @@
         private static void OnSizeChanged(object sender, RoutedEventArgs e)
         {
             var listBoxItem = (System.Windows.Controls.ListBoxItem)sender;
-            var value = listBoxItem.GetValue(ScrollViewerProperty);
-            var scrollViewer = value as ScrollViewer;
-            if (value == null)
-            {
-                scrollViewer = listBoxItem.VisualAncestors()
+            var scrollViewer = listBoxItem.VisualAncestors()
                                           .OfType<ScrollViewer>()
                                           .FirstOrDefault();
-                if (scrollViewer == null)
-                {
-                    listBoxItem.SetValue(ScrollViewerProperty, "No scrollviewer");
-                }
-                else
-                {
-                    var items = (List<System.Windows.Controls.ListBoxItem>)scrollViewer.GetValue(ListBoxItemsProperty);
-                    if (items == null)
-                    {
-                        items = new List<System.Windows.Controls.ListBoxItem>(1) { listBoxItem };
-                        scrollViewer.SetValue(ListBoxItemsProperty, items);
-                    }
-                    else
-                    {
-                        items.Add(listBoxItem);
-                    }
-                }
-            }
-
             if (scrollViewer != null)
             {
                 var scrolledIntoView = IsInView(scrollViewer, listBoxItem);
