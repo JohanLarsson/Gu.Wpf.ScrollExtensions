@@ -16,24 +16,24 @@
             typeof(RoutedEventHandler),
             typeof(ListBoxItem));
 
-        public static void AddScrolledIntoViewChangedHandler(this UIElement o, RoutedEventHandler handler)
-        {
-            o.AddHandler(ScrolledIntoViewChangedEvent, handler);
-        }
-
-        public static void RemoveScrolledIntoViewChangedHandler(this UIElement o, RoutedEventHandler handler)
-        {
-            o.RemoveHandler(ScrolledIntoViewChangedEvent, handler);
-        }
-
-        public static void AddFirstAppearanceHandler(this UIElement o, RoutedEventHandler handler)
+        public static void AddFirstAppearanceHandler(this System.Windows.Controls.ListBoxItem o, RoutedEventHandler handler)
         {
             o.AddHandler(FirstAppearanceEvent, handler);
         }
 
-        public static void RemoveFirstAppearanceHandler(this UIElement o, RoutedEventHandler handler)
+        public static void RemoveFirstAppearanceHandler(this System.Windows.Controls.ListBoxItem o, RoutedEventHandler handler)
         {
             o.RemoveHandler(FirstAppearanceEvent, handler);
+        }
+
+        public static void AddScrolledIntoViewChangedHandler(this System.Windows.Controls.ListBoxItem o, RoutedEventHandler handler)
+        {
+            o.AddHandler(ScrolledIntoViewChangedEvent, handler);
+        }
+
+        public static void RemoveScrolledIntoViewChangedHandler(this System.Windows.Controls.ListBoxItem o, RoutedEventHandler handler)
+        {
+            o.RemoveHandler(ScrolledIntoViewChangedEvent, handler);
         }
     }
 }

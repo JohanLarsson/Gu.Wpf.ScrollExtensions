@@ -1,7 +1,6 @@
 ﻿namespace Gu.Wpf.ScrollExtensions
 {
     using System;
-    using System.Linq;
     using System.Windows;
     using System.Windows.Controls;
 
@@ -13,18 +12,27 @@
             typeof(ListBoxItem),
             new PropertyMetadata(ScrolledIntoView.Nope, OnScrolledIntoViewChanged));
 
-        private static readonly DependencyProperty HasAppearedProperty = DependencyProperty.RegisterAttached(
+        public static readonly DependencyProperty IsScrolledIntoViewProperty = IsScrolledIntoViewPropertyKey.DependencyProperty;
+
+        private static readonly DependencyPropertyKey HasAppearedPropertyKey = DependencyProperty.RegisterAttachedReadOnly(
             "HasAppeared",
             typeof(bool),
             typeof(ListBoxItem),
             new PropertyMetadata(default(bool)));
 
-        public static readonly DependencyProperty IsScrolledIntoViewProperty = IsScrolledIntoViewPropertyKey.DependencyProperty;
+        public static readonly DependencyProperty HasAppearedProperty = HasAppearedPropertyKey.DependencyProperty;
+
+        private static readonly DependencyProperty ItemsChangedTrackerProperty = DependencyProperty.RegisterAttached(
+            "ItemsChangedTracker",
+            typeof(ItemsChangedTracker),
+            typeof(ListBoxItem),
+            new PropertyMetadata(null));
 
         static ListBoxItem()
         {
             EventManager.RegisterClassHandler(typeof(ScrollViewer), ScrollViewer.ScrollChangedEvent, new RoutedEventHandler(OnScrollChanged));
             EventManager.RegisterClassHandler(typeof(ScrollViewer), FrameworkElement.SizeChangedEvent, new RoutedEventHandler(OnScrollChanged));
+            EventManager.RegisterClassHandler(typeof(System.Windows.Controls.ListBox), ListBox.ItemsChangedEvent, new RoutedEventHandler(OnItemsChanged));
             EventManager.RegisterClassHandler(typeof(System.Windows.Controls.ListBoxItem), FrameworkElement.SizeChangedEvent, new RoutedEventHandler(OnListBoxItemSizeChanged));
         }
 
@@ -40,6 +48,18 @@
             return (ScrolledIntoView)element.GetValue(IsScrolledIntoViewProperty);
         }
 
+
+        private static void SetHasAppeared(System.Windows.Controls.ListBoxItem element, bool value)
+        {
+            element.SetValue(HasAppearedPropertyKey, value);
+        }
+
+        [AttachedPropertyBrowsableForChildren(IncludeDescendants = false)]
+        [AttachedPropertyBrowsableForType(typeof(System.Windows.Controls.ListBoxItem))]
+        public static bool GetHasAppeared(System.Windows.Controls.ListBoxItem element)
+        {
+            return (bool)element.GetValue(HasAppearedProperty);
+        }
         private static void OnScrolledIntoViewChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var item = (System.Windows.Controls.ListBoxItem)d;
@@ -52,7 +72,7 @@
                     case ScrolledIntoView.Fully:
                     case ScrolledIntoView.Partly:
                         item.RaiseEvent(new RoutedEventArgs(FirstAppearanceEvent));
-                        item.SetValue(HasAppearedProperty, true);
+                        item.SetValue(HasAppearedPropertyKey, true);
                         break;
                     case ScrolledIntoView.Nope:
                         break;
@@ -65,23 +85,27 @@
         private static void OnScrollChanged(object sender, RoutedEventArgs e)
         {
             var scrollViewer = (ScrollViewer)sender;
-            var listBox = scrollViewer.FirstVisualAncestorOfType<ListBox>();
+            var listBox = scrollViewer.FirstVisualAncestorOfType<System.Windows.Controls.ListBox>();
             if (listBox == null)
             {
                 return;
             }
 
-            for (int i = 0; i < listBox.Items.Count; i++)
+            if (listBox.GetValue(ItemsChangedTrackerProperty) == null)
             {
-                var item = listBox.ItemContainerGenerator.ContainerFromIndex(i) as System.Windows.Controls.ListBoxItem;
-                if (item == null)
-                {
-                    continue;
-                }
+                listBox.SetValue(ItemsChangedTrackerProperty, new ItemsChangedTracker(listBox));
+            }
 
-                // looping them all can potentially be expensive, profiler will tell
-                var isInView = scrollViewer.IsChildInView(item);
-                SetIsScrolledIntoView(item, isInView.Y);
+            UpdateItemsScrolledIntoView(listBox, scrollViewer);
+        }
+
+        private static void OnItemsChanged(object sender, RoutedEventArgs e)
+        {
+            var listBox = (System.Windows.Controls.ListBox)sender;
+            var scrollViewer = listBox.Template.FindName("ScrollViewer", listBox) as ScrollViewer;
+            if (scrollViewer != null)
+            {
+                UpdateItemsScrolledIntoView(listBox, scrollViewer);
             }
         }
 
@@ -93,6 +117,22 @@
             {
                 var scrolledIntoView = scrollViewer.IsChildInView(listBoxItem);
                 SetIsScrolledIntoView(listBoxItem, scrolledIntoView.Y);
+            }
+        }
+
+        private static void UpdateItemsScrolledIntoView(System.Windows.Controls.ListBox listBox, ScrollViewer scrollViewer)
+        {
+            for (int i = 0; i < listBox.Items.Count; i++)
+            {
+                var item = listBox.ItemContainerGenerator.ContainerFromIndex(i) as System.Windows.Controls.ListBoxItem;
+                if (item == null)
+                {
+                    continue;
+                }
+
+                // looping them all can potentially be expensive, profiler will tell
+                var isInView = scrollViewer.IsChildInView(item);
+                SetIsScrolledIntoView(item, isInView.Y);
             }
         }
     }
