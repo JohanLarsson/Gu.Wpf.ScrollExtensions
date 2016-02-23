@@ -8,7 +8,7 @@
         // http://blogs.msdn.com/b/llobo/archive/2007/01/18/elements-visibility-inside-scrollviewer.aspx
         internal static ScrollVisibility IsChildInView(this ScrollViewer scrollViewer, UIElement item)
         {
-            if (!item.IsArrangeValid)
+            if (!item.IsArrangeValid || !item.IsVisible)
             {
                 return new ScrollVisibility(ScrolledIntoView.Nope, ScrolledIntoView.Nope);
                 //item.UpdateLayout();
