@@ -22,17 +22,10 @@
 
         public static readonly DependencyProperty HasAppearedProperty = HasAppearedPropertyKey.DependencyProperty;
 
-        private static readonly DependencyProperty ItemsChangedTrackerProperty = DependencyProperty.RegisterAttached(
-            "ItemsChangedTracker",
-            typeof(ItemsChangedTracker),
-            typeof(ListBoxItem),
-            new PropertyMetadata(null));
-
         static ListBoxItem()
         {
             EventManager.RegisterClassHandler(typeof(ScrollViewer), ScrollViewer.ScrollChangedEvent, new RoutedEventHandler(OnScrollChanged));
             EventManager.RegisterClassHandler(typeof(ScrollViewer), FrameworkElement.SizeChangedEvent, new RoutedEventHandler(OnScrollChanged));
-            EventManager.RegisterClassHandler(typeof(System.Windows.Controls.ListBox), ListBox.ItemsChangedEvent, new RoutedEventHandler(OnItemsChanged));
             EventManager.RegisterClassHandler(typeof(System.Windows.Controls.ListBoxItem), FrameworkElement.SizeChangedEvent, new RoutedEventHandler(OnListBoxItemSizeChanged));
         }
 
@@ -91,22 +84,7 @@
                 return;
             }
 
-            if (listBox.GetValue(ItemsChangedTrackerProperty) == null)
-            {
-                listBox.SetValue(ItemsChangedTrackerProperty, new ItemsChangedTracker(listBox));
-            }
-
             UpdateItemsScrolledIntoView(listBox, scrollViewer);
-        }
-
-        private static void OnItemsChanged(object sender, RoutedEventArgs e)
-        {
-            var listBox = (System.Windows.Controls.ListBox)sender;
-            var scrollViewer = listBox.Template?.FindName("ScrollViewer", listBox) as ScrollViewer;
-            if (scrollViewer != null)
-            {
-                UpdateItemsScrolledIntoView(listBox, scrollViewer);
-            }
         }
 
         private static void OnListBoxItemSizeChanged(object sender, RoutedEventArgs e)
