@@ -102,7 +102,7 @@
         private static void OnItemsChanged(object sender, RoutedEventArgs e)
         {
             var listBox = (System.Windows.Controls.ListBox)sender;
-            var scrollViewer = listBox.Template.FindName("ScrollViewer", listBox) as ScrollViewer;
+            var scrollViewer = listBox.Template?.FindName("ScrollViewer", listBox) as ScrollViewer;
             if (scrollViewer != null)
             {
                 UpdateItemsScrolledIntoView(listBox, scrollViewer);
