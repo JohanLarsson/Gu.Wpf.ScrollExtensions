@@ -26,7 +26,7 @@
         <RepeatButton Click="OnSortClick"
                       Content="Toggle sort" />
         
-        <ListBox x:Name="ListBox"
+        <ListBox x:Name="IntListBox"
                  Grid.Row="1"
                  ItemsSource="{Binding Ints}"
                  scroll:ListBoxItem.ScrolledIntoViewChanged="ListBoxItem_OnScrolledIntoViewChanged">

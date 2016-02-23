@@ -29,7 +29,7 @@
 
         private void OnSortClick(object sender, RoutedEventArgs e)
         {
-            var view = CollectionViewSource.GetDefaultView(ListBox.Items);
+            var view = CollectionViewSource.GetDefaultView(IntListBox.Items);
             if (view.SortDescriptions.Count == 0)
             {
                 view.SortDescriptions.Add(new SortDescription("", ListSortDirection.Ascending));

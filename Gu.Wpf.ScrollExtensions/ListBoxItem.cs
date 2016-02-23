@@ -41,7 +41,6 @@
             return (ScrolledIntoView)element.GetValue(IsScrolledIntoViewProperty);
         }
 
-
         private static void SetHasAppeared(System.Windows.Controls.ListBoxItem element, bool value)
         {
             element.SetValue(HasAppearedPropertyKey, value);

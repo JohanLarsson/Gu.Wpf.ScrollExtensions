@@ -10,6 +10,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".paket", ".paket", "{BB215996-7F73-4F60-AD88-E7C6CF9C33A9}"
 	ProjectSection(SolutionItems) = preProject
 		.paket\paket.bootstrapper.exe = .paket\paket.bootstrapper.exe
+		paket.dependencies = paket.dependencies
+		paket.lock = paket.lock
 		.paket\Readme.paket.md = .paket\Readme.paket.md
 	EndProjectSection
 EndProject
