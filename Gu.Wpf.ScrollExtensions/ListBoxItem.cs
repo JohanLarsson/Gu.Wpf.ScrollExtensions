@@ -25,7 +25,7 @@
         static ListBoxItem()
         {
             EventManager.RegisterClassHandler(typeof(ScrollViewer), ScrollViewer.ScrollChangedEvent, new RoutedEventHandler(OnScrollChanged));
-            EventManager.RegisterClassHandler(typeof(ScrollViewer), FrameworkElement.SizeChangedEvent, new RoutedEventHandler(OnScrollChanged));
+            EventManager.RegisterClassHandler(typeof(ScrollViewer), FrameworkElement.SizeChangedEvent, new RoutedEventHandler(OnScrollViewerSizeChanged));
             EventManager.RegisterClassHandler(typeof(System.Windows.Controls.ListBoxItem), FrameworkElement.SizeChangedEvent, new RoutedEventHandler(OnListBoxItemSizeChanged));
         }
 
@@ -52,6 +52,7 @@
         {
             return (bool)element.GetValue(HasAppearedProperty);
         }
+
         private static void OnScrolledIntoViewChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var item = (System.Windows.Controls.ListBoxItem)d;
@@ -76,14 +77,12 @@
 
         private static void OnScrollChanged(object sender, RoutedEventArgs e)
         {
-            var scrollViewer = (ScrollViewer)sender;
-            var listBox = scrollViewer.FirstVisualAncestorOfType<System.Windows.Controls.ListBox>();
-            if (listBox == null)
-            {
-                return;
-            }
+            UpdateItemsScrolledIntoView((ScrollViewer)sender);
+        }
 
-            UpdateItemsScrolledIntoView(listBox, scrollViewer);
+        private static void OnScrollViewerSizeChanged(object sender, RoutedEventArgs e)
+        {
+            UpdateItemsScrolledIntoView((ScrollViewer)sender);
         }
 
         private static void OnListBoxItemSizeChanged(object sender, RoutedEventArgs e)
@@ -97,9 +96,20 @@
             }
         }
 
+        private static void UpdateItemsScrolledIntoView(ScrollViewer scrollViewer)
+        {
+            var listBox = scrollViewer.FirstVisualAncestorOfType<System.Windows.Controls.ListBox>();
+            if (listBox == null)
+            {
+                return;
+            }
+
+            UpdateItemsScrolledIntoView(listBox, scrollViewer);
+        }
+
         private static void UpdateItemsScrolledIntoView(System.Windows.Controls.ListBox listBox, ScrollViewer scrollViewer)
         {
-            for (int i = 0; i < listBox.Items.Count; i++)
+            for (var i = 0; i < listBox.Items.Count; i++)
             {
                 var item = listBox.ItemContainerGenerator.ContainerFromIndex(i) as System.Windows.Controls.ListBoxItem;
                 if (item == null)
