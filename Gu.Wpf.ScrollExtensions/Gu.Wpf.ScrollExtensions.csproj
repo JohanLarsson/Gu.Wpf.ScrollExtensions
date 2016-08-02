@@ -48,6 +48,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScrolledIntoView.cs" />
     <Compile Include="Internals\VisualTreeHelperExt.cs" />
+    <Compile Include="ScrollViewer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="paket.template" />
